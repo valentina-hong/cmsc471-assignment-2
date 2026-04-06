@@ -1,20 +1,1106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment 2</title>
-    <link rel="stylesheet" href="css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #0a0c10;
+    --surface: #111318;
+    --border:  #1e2330;
+    --accent:  #00e5ff;
+    --accent2: #ff6b35;
+    --accent3: #a8ff78;
+    --text:    #e8eaf0;
+    --muted:   #5a6070;
+    --glow:    rgba(0,229,255,0.15);
+    --glow2:   rgba(255,107,53,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 28px 36px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent 60%);
+  }
+  .title-block h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .title-block h1 span { color: var(--accent); }
+  .title-block p {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .header-stats { display: flex; gap: 32px; }
+  .stat { text-align: right; }
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: calc(100vh - 85px);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 20px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .sidebar-section h3 {
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── MODE BUTTONS (sidebar) ── */
+  .mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 8px 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    margin-bottom: 5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .mode-btn:hover { border-color: var(--accent); color: var(--text); }
+  .mode-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--glow);
+  }
+  .mode-btn.mode-black:hover  { border-color: var(--accent2); color: var(--text); }
+  .mode-btn.mode-black.active { border-color: var(--accent2); color: var(--accent2); background: var(--glow2); }
+  .mode-btn.mode-writeup:hover  { border-color: var(--accent3); color: var(--text); }
+  .mode-btn.mode-writeup.active { border-color: var(--accent3); color: var(--accent3); background: rgba(168,255,120,0.1); }
+
+  .mode-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── VIEW BUTTONS ── */
+  .view-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    padding: 7px 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .view-btn:hover { border-color: var(--accent); color: var(--text); }
+  .view-btn.active { border-color: var(--accent); color: var(--accent); background: var(--glow); }
+
+  /* sort/top selects */
+  .ctrl-row { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .ctrl-label {
+    font-size: 0.54rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .ctrl-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 5px 8px;
+    cursor: pointer;
+    outline: none;
+    width: 100%;
+    letter-spacing: 0.04em;
+  }
+  .ctrl-select:focus { border-color: var(--accent); }
+
+  /* ── MAIN AREA ── */
+  .main-area {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* panel header bar */
+  .panel-header {
+    padding: 10px 20px 9px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .panel-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+  }
+  .panel-header.white-header::after  { background: linear-gradient(90deg, var(--accent),  transparent 50%); }
+  .panel-header.black-header::after  { background: linear-gradient(90deg, var(--accent2), transparent 50%); }
+  .panel-header.writeup-header::after{ background: linear-gradient(90deg, var(--accent3), transparent 50%); }
+
+  .panel-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .panel-tag {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border: 1px solid;
+  }
+  .panel-tag.white-tag  { border-color: var(--accent);  color: var(--accent); }
+  .panel-tag.black-tag  { border-color: var(--accent2); color: var(--accent2); }
+  .panel-tag.writeup-tag{ border-color: var(--accent3); color: var(--accent3); }
+
+  /* ── METRIC CARDS ── */
+  .metrics-bar {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .metric-card {
+    padding: 12px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .metric-card:last-child { border-right: none; }
+  .metric-card-label {
+    font-size: 0.54rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .metric-card-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .metric-card-sub {
+    font-size: 0.54rem;
+    color: var(--muted);
+    margin-top: 3px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── LEGEND BAR ── */
+  .legend-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 7px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .legend-swatch {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── CHART SCROLL AREA ── */
+  .chart-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+  }
+  .chart-scroll svg { display: block; }
+
+  /* ── ANNOTATION BOX (black hat) ── */
+  .annotation-box {
+    margin: 12px 20px 0;
+    border: 1px solid var(--accent2);
+    padding: 10px 14px;
+    font-size: 0.62rem;
+    color: var(--accent2);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+    background: var(--glow2);
+    flex-shrink: 0;
+  }
+  .annotation-box strong {
+    display: block;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: var(--accent2);
+  }
+
+  /* ── TOOLTIP ── */
+  #tooltip {
+    position: fixed;
+    background: #0d1218;
+    border: 1px solid var(--accent);
+    padding: 12px 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+    min-width: 180px;
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(0,229,255,0.12);
+  }
+  #tooltip.visible { opacity: 1; }
+  #tooltip .tt-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  #tooltip .tt-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.6rem;
+    margin-bottom: 3px;
+    color: var(--muted);
+  }
+  #tooltip .tt-val { color: var(--text); font-weight: 700; }
+  #tooltip .tt-note { font-size: 0.56rem; color: var(--muted); margin-top: 6px; font-style: italic; }
+
+  /* ── SECTION VISIBILITY ── */
+  .section { display: none; }
+  .section.visible { display: contents; }
+
+  /* ── WRITE-UP SECTION ── */
+  .writeup-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 36px;
+  }
+  .writeup-scroll h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .writeup-scroll h2 span { color: var(--accent3); }
+  .writeup-scroll .byline {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .writeup-scroll h3 {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent3);
+    margin: 24px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .writeup-scroll p {
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 14px;
+    max-width: 680px;
+  }
+  .writeup-callout {
+    border-left: 2px solid var(--accent3);
+    padding: 10px 16px;
+    margin: 16px 0;
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: var(--accent3);
+    background: rgba(168,255,120,0.05);
+    max-width: 680px;
+  }
+  .writeup-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+    max-width: 680px;
+  }
+  .compare-card {
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    background: var(--surface);
+  }
+  .compare-card h4 {
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .compare-card.card-white h4 { color: var(--accent); }
+  .compare-card.card-black h4 { color: var(--accent2); }
+  .compare-card ul {
+    padding-left: 14px;
+    font-size: 0.65rem;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+</style>
 </head>
 <body>
-    <div id="tooltip" style="display:none"></div> 
-    <div class="container"> <!-- Centers content and sets max width -->
-        <h1>Assignment 2</h1>
-        <div id="vis"></div> <!--  Will hold our visualization (SVG) -->
+
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header>
+  <div class="title-block">
+    <h1><span>Assignment 2</span>: GHG Emissions Per Capita</h1>
+  </div>
+  <div class="header-stats">
+    <div class="stat"><div class="stat-val" id="stat-countries">—</div><div class="stat-label">Countries</div></div>
+    <div class="stat"><div class="stat-val" id="stat-years">—</div><div class="stat-label">Years</div></div>
+    <div class="stat"><div class="stat-val" id="stat-mode">WHITE HAT</div><div class="stat-label">Current Mode</div></div>
+  </div>
+</header>
+
+<!-- ── LAYOUT ─────────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <h3>Mode</h3>
+      <button class="mode-btn active" data-mode="white">
+        <span class="mode-dot" style="background:var(--accent)"></span>White Hat
+      </button>
+      <button class="mode-btn mode-black" data-mode="black">
+        <span class="mode-dot" style="background:var(--accent2)"></span>Black Hat
+      </button>
+      <button class="mode-btn mode-writeup" data-mode="writeup">
+        <span class="mode-dot" style="background:var(--accent3)"></span>Write-Up
+      </button>
     </div>
 
-    <!-- Load D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="js/script.js"></script>
+    <!-- White hat views -->
+    <div class="sidebar-section" id="white-controls">
+      <h3>View</h3>
+      <button class="view-btn active" data-view="bar">▬ Ranking</button>
+      <button class="view-btn" data-view="trend">↗ Trend Lines</button>
+      <button class="view-btn" data-view="change">± Change</button>
+      <div class="ctrl-row" id="bar-ctrls" style="margin-top:10px">
+        <span class="ctrl-label">Sort order</span>
+        <select class="ctrl-select" id="w-sortSel">
+          <option value="desc">Highest first</option>
+          <option value="asc">Lowest first</option>
+        </select>
+        <span class="ctrl-label" style="margin-top:6px">Countries shown</span>
+        <select class="ctrl-select" id="w-topSel">
+          <option value="30">Top 30</option>
+          <option value="10">Top 10</option>
+          <option value="all">All</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Black hat views -->
+    <div class="sidebar-section" id="black-controls" style="display:none">
+      <h3>Manipulation</h3>
+      <button class="view-btn active" data-bview="truncated" style="border-color:var(--accent2);color:var(--accent2)">⚠ Truncated Axis</button>
+      <button class="view-btn" data-bview="cherry">⚠ Cherry-Picked</button>
+      <button class="view-btn" data-bview="nodrop">⚠ Rising Again</button>
+    </div>
+
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="main-area" id="main-area">
+
+    <!-- WHITE HAT SECTION -->
+    <div class="section visible" id="section-white" style="display:contents">
+      <div class="metrics-bar" id="w-metrics"></div>
+      <div class="legend-bar-row" id="w-legend"></div>
+      <div class="chart-scroll" id="w-chart-scroll">
+        <svg id="w-svg"></svg>
+      </div>
+    </div>
+
+    <!-- BLACK HAT SECTION -->
+    <div class="section" id="section-black">
+      <div class="annotation-box" id="b-annotation">
+        <strong>Active manipulation</strong>
+        Hover bars for context on what's being hidden.
+      </div>
+      <div class="legend-bar-row" id="b-legend"></div>
+      <div class="chart-scroll" id="b-chart-scroll">
+        <svg id="b-svg"></svg>
+      </div>
+    </div>
+
+    <!-- WRITE-UP SECTION -->
+    <div class="section" id="section-writeup">
+      <div class="writeup-scroll">
+        <h2>YOUR <span>WRITE-UP</span> TITLE HERE</h2>
+
+        <p>YOUR INTRODUCTORY PARAGRAPH HERE. Replace this with your own text setting the scene
+        and explaining what the dataset shows and why it matters to your audience.</p>
+
+        <h3>Key Finding One</h3>
+        <p>YOUR FINDING HERE. Describe what the white hat chart reveals — which countries have
+        the highest per-capita emissions, and how the overall picture has shifted since the
+        earliest year in the dataset.</p>
+
+        <div class="writeup-callout">
+          YOUR PULL QUOTE OR KEY STATISTIC HERE — e.g. "Australia emits nearly 4× more
+          CO₂-equivalent per person than France, despite both being OECD members."
+        </div>
+
+        <h3>Key Finding Two</h3>
+        <p>YOUR FINDING HERE. Discuss the trend data — most countries show a downward
+        trajectory, with a notable dip in 2020 followed by a partial rebound in 2021–22
+        as economic activity recovered post-COVID.</p>
+
+        <h3>How the Same Data Can Mislead</h3>
+        <p>The Black Hat tab demonstrates three common manipulation techniques applied to
+        the identical underlying dataset. Compare the design choices:</p>
+
+        <div class="writeup-compare">
+          <div class="compare-card card-white">
+            <h4>White Hat</h4>
+            <ul>
+              <li>Y-axis starts at zero</li>
+              <li>All countries shown</li>
+              <li>Full year range</li>
+              <li>Neutral, factual title</li>
+              <li>Per-capita units stated</li>
+            </ul>
+          </div>
+          <div class="compare-card card-black">
+            <h4>Black Hat</h4>
+            <ul>
+              <li>Truncated axis exaggerates</li>
+              <li>Only worst performers shown</li>
+              <li>Recent uptick decontextualised</li>
+              <li>Alarmist / accusatory framing</li>
+              <li>No baseline for comparison</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Methodology Note</h3>
+        <p>YOUR METHODOLOGY NOTE HERE. Explain what "excluding LULUCF" means, the unit
+        (kg CO₂-equivalent per person, values in thousands in the raw CSV), data source,
+        and any known gaps such as missing values for some countries in the most recent year.</p>
+
+        <p>YOUR CLOSING PARAGRAPH HERE.</p>
+      </div>
+    </div>
+
+  </div><!-- /main-area -->
+</div><!-- /layout -->
+
+<!-- TOOLTIP -->
+<div id="tooltip">
+  <div class="tt-name" id="tt-name"></div>
+  <div class="tt-row"><span>Value</span><span class="tt-val" id="tt-val"></span></div>
+  <div class="tt-note" id="tt-note"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════════════════════ */
+const AGG_REGIONS = new Set([
+  'OECD America','OECD Asia Oceania','OECD Europe','OECD - Total',
+  'G20','European Union – 27 countries (from 2020)',
+  'European Union (27 countries from 01/02/2020)','World','OECD'
+]);
+let DATA = {}, YEARS = [], COUNTRIES = [];
+
+function parseCSV(rows) {
+  const yearSet = new Set();
+  rows.forEach(r => {
+    if (AGG_REGIONS.has(r['Reference area'])) return;
+    if (!r['OBS_VALUE']) return;
+    yearSet.add(r['TIME_PERIOD']);
+  });
+  YEARS = [...yearSet].map(Number).sort((a, b) => a - b);
+  const byCountry = {};
+  rows.forEach(r => {
+    const c = r['Reference area'];
+    if (AGG_REGIONS.has(c)) return;
+    const yr = +r['TIME_PERIOD'];
+    const v  = r['OBS_VALUE'] ? +r['OBS_VALUE'] : null;
+    if (!byCountry[c]) byCountry[c] = {};
+    byCountry[c][yr] = v;
+  });
+  DATA = {};
+  Object.entries(byCountry).forEach(([c, m]) => { DATA[c] = YEARS.map(y => m[y] ?? null); });
+  COUNTRIES = Object.keys(DATA);
+}
+
+d3.csv('data/data.csv').then(rows => {
+  parseCSV(rows);
+  const lastYear = YEARS[YEARS.length - 1];
+  document.getElementById('stat-countries').textContent = COUNTRIES.length;
+  document.getElementById('stat-years').textContent     = YEARS.length;
+  document.querySelectorAll('[data-view]').forEach(b => {
+    if (b.dataset.view === 'bar')    b.textContent = '▬ ' + lastYear + ' Ranking';
+    if (b.dataset.view === 'change') b.textContent = '± Change ' + YEARS[0] + '→' + lastYear;
+  });
+  renderWhite();
+}).catch(() => {
+  document.getElementById('w-chart-scroll').innerHTML =
+    '<p style="color:var(--accent2);padding:2rem;font-size:0.7rem">Could not load <code>data/data.csv</code>. Serve via local server.</p>';
+});
+
+/* ═══════════════════════════════════════════════════════════
+   TOOLTIP
+   ═══════════════════════════════════════════════════════════ */
+const tip = document.getElementById('tooltip');
+function showTip(e, name, val, note) {
+  document.getElementById('tt-name').textContent = name;
+  document.getElementById('tt-val').textContent  = val;
+  document.getElementById('tt-note').textContent = note || '';
+  tip.classList.add('visible');
+  moveTip(e);
+}
+function moveTip(e) {
+  tip.style.left = (e.clientX + 16) + 'px';
+  tip.style.top  = (e.clientY - 10) + 'px';
+}
+function hideTip() { tip.classList.remove('visible'); }
+
+/* ═══════════════════════════════════════════════════════════
+   MODE SWITCHER
+   ═══════════════════════════════════════════════════════════ */
+let currentMode = 'white';
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    document.getElementById('stat-mode').textContent =
+      currentMode === 'white' ? 'WHITE HAT' : currentMode === 'black' ? 'BLACK HAT' : 'WRITE-UP';
+    document.getElementById('stat-mode').style.color =
+      currentMode === 'white' ? 'var(--accent)' : currentMode === 'black' ? 'var(--accent2)' : 'var(--accent3)';
+
+    ['white','black','writeup'].forEach(m => {
+      const s = document.getElementById('section-' + m);
+      s.classList.toggle('visible', m === currentMode);
+      s.style.display = m === currentMode ? 'contents' : 'none';
+    });
+    document.getElementById('white-controls').style.display = currentMode === 'white'   ? '' : 'none';
+    document.getElementById('black-controls').style.display = currentMode === 'black'   ? '' : 'none';
+    if (currentMode === 'black')   renderBlack();
+    if (currentMode === 'white')   renderWhite();
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   WHITE HAT
+   ═══════════════════════════════════════════════════════════ */
+let wView = 'bar';
+
+document.querySelectorAll('[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    wView = btn.dataset.view;
+    document.getElementById('bar-ctrls').style.display = wView === 'bar' ? '' : 'none';
+    renderWhite();
+  });
+});
+document.getElementById('w-sortSel').addEventListener('change', renderWhite);
+document.getElementById('w-topSel').addEventListener('change',  renderWhite);
+
+function lastVal(c) { return DATA[c][YEARS.length - 1]; }
+
+function setMetrics(items) {
+  const vals   = items.map(d => d.v).filter(v => v != null);
+  const avg    = d3.mean(vals);
+  const sorted = [...items].filter(d => d.v != null).sort((a,b) => b.v - a.v);
+  const lastYr = YEARS[YEARS.length - 1];
+  document.getElementById('w-metrics').innerHTML = `
+    <div class="metric-card"><div class="metric-card-label">Avg (${lastYr})</div><div class="metric-card-val">${avg.toFixed(1)}</div><div class="metric-card-sub">t CO₂e / person</div></div>
+    <div class="metric-card"><div class="metric-card-label">Highest emitter</div><div class="metric-card-val" style="font-size:1rem">${sorted[0].c}</div><div class="metric-card-sub">${sorted[0].v.toFixed(1)} t</div></div>
+    <div class="metric-card"><div class="metric-card-label">Lowest emitter</div><div class="metric-card-val" style="font-size:1rem">${sorted[sorted.length-1].c}</div><div class="metric-card-sub">${sorted[sorted.length-1].v.toFixed(1)} t</div></div>
+    <div class="metric-card"><div class="metric-card-label">Countries</div><div class="metric-card-val">${items.length}</div><div class="metric-card-sub">with ${lastYr} data</div></div>
+  `;
+}
+
+function barColor(v) {
+  if (v > 13) return '#ff6b35';
+  if (v > 7)  return '#00e5ff';
+  return '#a8ff78';
+}
+
+function renderWhite() {
+  if      (wView === 'bar')    wRenderBar();
+  else if (wView === 'trend')  wRenderTrend();
+  else                         wRenderChange();
+}
+
+/* shared D3 axis style */
+function styleAxis(ax) {
+  ax.select('.domain').remove();
+  ax.selectAll('line').remove();
+  ax.selectAll('text')
+    .attr('fill', 'var(--muted)')
+    .attr('font-size', '0.6rem')
+    .attr('font-family', 'Space Mono, monospace')
+    .attr('letter-spacing', '0.04em');
+}
+
+function wRenderBar() {
+  const sortDir = document.getElementById('w-sortSel').value;
+  const topN    = document.getElementById('w-topSel').value;
+  let data = COUNTRIES.map(c => ({ c, v: lastVal(c) })).filter(d => d.v != null);
+  data.sort((a, b) => sortDir === 'desc' ? b.v - a.v : a.v - b.v);
+  if (topN !== 'all') data = data.slice(0, +topN);
+
+  setMetrics(COUNTRIES.map(c => ({ c, v: lastVal(c) })).filter(d => d.v != null));
+  document.getElementById('w-legend').innerHTML = `
+    <div class="legend-item"><span class="legend-swatch" style="background:#ff6b35"></span>High &gt;13 t</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#00e5ff"></span>Mid 7–13 t</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#a8ff78"></span>Low &lt;7 t</div>`;
+
+  const container = document.getElementById('w-chart-scroll');
+  const W = container.clientWidth;
+  const margin = { top: 8, right: 56, bottom: 28, left: 130 };
+  const rowH = 26;
+  const H = data.length * rowH + margin.top + margin.bottom;
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top - margin.bottom;
+
+  const svg = d3.select('#w-svg').attr('width', W).attr('height', H);
+  svg.selectAll('*').remove();
+
+  const x = d3.scaleLinear().domain([0, d3.max(data, d => d.v) * 1.05]).range([0, iW]);
+  const y = d3.scaleBand().domain(data.map(d => d.c)).range([0, iH]).padding(0.28);
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  /* grid lines */
+  g.selectAll('.gl').data(x.ticks(5)).join('line')
+    .attr('x1', d => x(d)).attr('x2', d => x(d))
+    .attr('y1', 0).attr('y2', iH)
+    .attr('stroke', 'var(--border)').attr('stroke-dasharray', '2,3');
+
+  g.append('g').attr('transform', `translate(0,${iH})`)
+    .call(d3.axisBottom(x).ticks(5).tickFormat(d => d + ' t'))
+    .call(styleAxis);
+
+  g.append('g').call(d3.axisLeft(y).tickSize(0))
+    .call(ax => { ax.select('.domain').remove(); ax.selectAll('text').attr('fill', 'var(--text)').attr('font-size', '0.62rem').attr('font-family', 'Space Mono, monospace').attr('dx', -6); });
+
+  const bars = g.selectAll('.bar').data(data).join('rect')
+    .attr('x', 0).attr('y', d => y(d.c))
+    .attr('height', y.bandwidth()).attr('rx', 1)
+    .attr('fill', d => barColor(d.v)).attr('fill-opacity', 0.85)
+    .attr('width', 0);
+
+  bars.transition().duration(500).ease(d3.easeCubicOut).attr('width', d => x(d.v));
+
+  g.selectAll('.vl').data(data).join('text')
+    .attr('x', d => x(d.v) + 5)
+    .attr('y', d => y(d.c) + y.bandwidth() / 2 + 4)
+    .attr('font-size', '0.58rem').attr('font-family', 'Space Mono, monospace')
+    .attr('fill', 'var(--muted)')
+    .text(d => d.v.toFixed(1));
+
+  bars.on('mousemove', (e, d) => showTip(e, d.c, d.v.toFixed(2) + ' t CO₂e/person', YEARS[YEARS.length-1] + ' · per-capita · excl. LULUCF'))
+      .on('mousemove', function(e, d) { showTip(e, d.c, d.v.toFixed(2) + ' t', YEARS[YEARS.length-1] + ' · per-capita'); moveTip(e); })
+      .on('mouseleave', hideTip);
+}
+
+function wRenderTrend() {
+  const highlight = [
+    { c: 'Australia',      col: '#ff6b35' },
+    { c: 'Canada',         col: '#ffaa80' },
+    { c: 'New Zealand',    col: '#EF9F27' },
+    { c: 'Germany',        col: '#00e5ff' },
+    { c: 'Japan',          col: '#85b7eb' },
+    { c: 'United Kingdom', col: '#7F77DD' },
+    { c: 'France',         col: '#a8ff78' },
+    { c: 'Sweden',         col: '#5DCAA5' },
+  ].filter(h => DATA[h.c]);
+
+  setMetrics(COUNTRIES.map(c => ({ c, v: lastVal(c) })).filter(d => d.v != null));
+  document.getElementById('w-legend').innerHTML = highlight.map(h =>
+    `<div class="legend-item"><span class="legend-swatch" style="background:${h.col}"></span>${h.c}</div>`).join('');
+
+  const container = document.getElementById('w-chart-scroll');
+  const W = container.clientWidth, H = 380;
+  const margin = { top: 14, right: 80, bottom: 34, left: 46 };
+  const iW = W - margin.left - margin.right, iH = H - margin.top - margin.bottom;
+
+  const svg = d3.select('#w-svg').attr('width', W).attr('height', H);
+  svg.selectAll('*').remove();
+
+  const x = d3.scalePoint().domain(YEARS).range([0, iW]);
+  const y = d3.scaleLinear().domain([0, 26]).range([iH, 0]);
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  g.selectAll('.yg').data(y.ticks(6)).join('line')
+    .attr('x1', 0).attr('x2', iW).attr('y1', d => y(d)).attr('y2', d => y(d))
+    .attr('stroke', 'var(--border)').attr('stroke-dasharray', '2,3');
+
+  g.append('g').call(d3.axisLeft(y).ticks(6).tickFormat(d => d + ' t')).call(styleAxis);
+  g.append('g').attr('transform', `translate(0,${iH})`)
+    .call(d3.axisBottom(x).tickFormat(d => d))
+    .call(ax => { styleAxis(ax); ax.select('.domain').attr('stroke', 'var(--border)'); });
+
+  const line = d3.line().x((d,i) => x(YEARS[i])).y(d => d != null ? y(d) : null).defined(d => d != null).curve(d3.curveMonotoneX);
+
+  highlight.forEach(({ c, col }) => {
+    const path = g.append('path').datum(DATA[c]).attr('fill', 'none').attr('stroke', col).attr('stroke-width', 1.5).attr('d', line);
+    const len = path.node().getTotalLength();
+    path.attr('stroke-dasharray', len).attr('stroke-dashoffset', len).transition().duration(800).ease(d3.easeLinear).attr('stroke-dashoffset', 0);
+    const last = DATA[c].filter(v => v != null).slice(-1)[0];
+    const li = DATA[c].lastIndexOf(last);
+    g.append('text').attr('x', x(YEARS[li]) + 5).attr('y', y(last) + 4).attr('font-size', '0.56rem').attr('font-family', 'Space Mono, monospace').attr('fill', col).text(c.length > 10 ? c.slice(0,9)+'…' : c);
+  });
+
+  const vline = g.append('line').attr('y1', 0).attr('y2', iH).attr('stroke', 'var(--muted)').attr('stroke-width', 1).attr('opacity', 0);
+  g.append('rect').attr('width', iW).attr('height', iH).attr('fill', 'transparent')
+    .on('mousemove', function(event) {
+      const [mx] = d3.pointer(event);
+      const i = d3.minIndex(YEARS.map(yr => Math.abs(x(yr) - mx)));
+      vline.attr('x1', x(YEARS[i])).attr('x2', x(YEARS[i])).attr('opacity', 1);
+      const rows = highlight.map(h => DATA[h.c][i] != null ? `${h.c}: ${DATA[h.c][i].toFixed(2)} t` : '').filter(Boolean).join(' · ');
+      showTip(event, String(YEARS[i]), rows, '');
+    }).on('mouseleave', () => { hideTip(); vline.attr('opacity', 0); });
+}
+
+function wRenderChange() {
+  const changes = COUNTRIES.map(c => {
+    const v0 = DATA[c][0], v1 = lastVal(c);
+    if (v0 == null || v1 == null) return null;
+    return { c, delta: +(v1-v0).toFixed(2), pct: +((v1-v0)/v0*100).toFixed(1) };
+  }).filter(Boolean).sort((a, b) => a.delta - b.delta);
+
+  setMetrics(COUNTRIES.map(c => ({ c, v: lastVal(c) })).filter(d => d.v != null));
+  document.getElementById('w-legend').innerHTML = `
+    <div class="legend-item"><span class="legend-swatch" style="background:#a8ff78"></span>Fell</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#ff6b35"></span>Rose</div>`;
+
+  const container = document.getElementById('w-chart-scroll');
+  const W = container.clientWidth;
+  const margin = { top: 8, right: 70, bottom: 28, left: 130 };
+  const H = changes.length * 26 + margin.top + margin.bottom;
+  const iW = W - margin.left - margin.right, iH = H - margin.top - margin.bottom;
+  const ext = d3.max(changes, d => Math.abs(d.delta));
+
+  const svg = d3.select('#w-svg').attr('width', W).attr('height', H);
+  svg.selectAll('*').remove();
+
+  const x  = d3.scaleLinear().domain([-ext*1.1, ext*1.1]).range([0, iW]);
+  const y  = d3.scaleBand().domain(changes.map(d => d.c)).range([0, iH]).padding(0.28);
+  const g  = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  const x0 = x(0);
+
+  g.selectAll('.gl').data(x.ticks(6)).join('line')
+    .attr('x1', d => x(d)).attr('x2', d => x(d)).attr('y1', 0).attr('y2', iH)
+    .attr('stroke', 'var(--border)').attr('stroke-dasharray', '2,3');
+  g.append('line').attr('x1', x0).attr('x2', x0).attr('y1', 0).attr('y2', iH)
+    .attr('stroke', 'var(--muted)').attr('stroke-width', 1);
+
+  g.append('g').attr('transform', `translate(0,${iH})`).call(d3.axisBottom(x).ticks(6).tickFormat(d => (d>0?'+':'')+d+' t')).call(styleAxis);
+  g.append('g').call(d3.axisLeft(y).tickSize(0)).call(ax => { ax.select('.domain').remove(); ax.selectAll('text').attr('fill','var(--text)').attr('font-size','0.62rem').attr('font-family','Space Mono, monospace').attr('dx',-6); });
+
+  const bars = g.selectAll('.bar').data(changes).join('rect')
+    .attr('x', d => d.delta < 0 ? x(d.delta) : x0).attr('y', d => y(d.c))
+    .attr('height', y.bandwidth()).attr('rx', 1)
+    .attr('fill', d => d.delta < 0 ? '#a8ff78' : '#ff6b35').attr('fill-opacity', 0.85)
+    .attr('width', 0);
+  bars.transition().duration(500).ease(d3.easeCubicOut).attr('width', d => Math.abs(x(d.delta) - x0));
+
+  g.selectAll('.vl').data(changes).join('text')
+    .attr('x', d => d.delta < 0 ? x(d.delta)-4 : x0+Math.abs(x(d.delta)-x0)+4)
+    .attr('text-anchor', d => d.delta<0?'end':'start')
+    .attr('y', d => y(d.c)+y.bandwidth()/2+4)
+    .attr('font-size','0.58rem').attr('font-family','Space Mono, monospace').attr('fill','var(--muted)')
+    .text(d => (d.delta>0?'+':'')+d.delta.toFixed(1));
+
+  bars.on('mousemove', (e, d) => showTip(e, d.c, (d.delta>0?'+':'')+d.delta.toFixed(2)+' t', (d.pct>0?'+':'')+d.pct+'% vs '+YEARS[0]))
+      .on('mouseleave', hideTip);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BLACK HAT
+   ═══════════════════════════════════════════════════════════ */
+let bView = 'truncated';
+
+document.querySelectorAll('[data-bview]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-bview]').forEach(b => {
+      b.classList.remove('active');
+      b.style.borderColor = ''; b.style.color = '';
+    });
+    btn.classList.add('active');
+    btn.style.borderColor = 'var(--accent2)';
+    btn.style.color = 'var(--accent2)';
+    bView = btn.dataset.bview;
+    renderBlack();
+  });
+});
+
+function renderBlack() {
+  if      (bView === 'truncated') bRenderTruncated();
+  else if (bView === 'cherry')    bRenderCherry();
+  else                            bRenderNoDrop();
+}
+
+function bRenderTruncated() {
+  document.getElementById('b-annotation').innerHTML =
+    '<strong>Truncated Y-axis</strong>Axis starts at 14 t instead of 0. The differences between countries look 10× larger than they really are.';
+  document.getElementById('b-legend').innerHTML =
+    '<div class="legend-item" style="color:var(--accent2)">⚠ No zero baseline · Differences visually exaggerated</div>';
+
+  const cherry = ['Australia','Canada','Kazakhstan','New Zealand','Russia'].filter(c => DATA[c]);
+  const data = cherry.map(c => ({ c, v: lastVal(c) ?? DATA[c].filter(v=>v!=null).slice(-1)[0] })).sort((a,b)=>b.v-a.v);
+
+  const container = document.getElementById('b-chart-scroll');
+  const W = container.clientWidth, H = 300;
+  const margin = { top: 36, right: 20, bottom: 44, left: 100 };
+  const iW = W - margin.left - margin.right, iH = H - margin.top - margin.bottom;
+
+  const svg = d3.select('#b-svg').attr('width', W).attr('height', H);
+  svg.selectAll('*').remove();
+
+  svg.append('text').attr('x', W/2).attr('y', 22).attr('text-anchor','middle')
+    .attr('font-family','Syne, sans-serif').attr('font-weight',800).attr('font-size','0.8rem')
+    .attr('fill','var(--accent2)').attr('letter-spacing','0.04em')
+    .text('WORST POLLUTERS SHOW ALARMING EMISSION LEVELS');
+
+  const yMin = 14, yMax = d3.max(data, d => d.v) * 1.06;
+  const x = d3.scaleBand().domain(data.map(d=>d.c)).range([0, iW]).padding(0.35);
+  const y = d3.scaleLinear().domain([yMin, yMax]).range([iH, 0]);
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  g.selectAll('.gl').data(y.ticks(5)).join('line')
+    .attr('x1',0).attr('x2',iW).attr('y1',d=>y(d)).attr('y2',d=>y(d))
+    .attr('stroke','var(--border)').attr('stroke-dasharray','2,3');
+
+  g.append('g').attr('transform',`translate(0,${iH})`).call(d3.axisBottom(x)).call(ax=>{ax.select('.domain').remove();ax.selectAll('line').remove();ax.selectAll('text').attr('fill','var(--text)').attr('font-size','0.65rem').attr('font-family','Space Mono, monospace');});
+  g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+' t')).call(styleAxis);
+
+  /* subtle axis break */
+  g.append('path').attr('d',`M-7,${iH} L0,${iH-5} L7,${iH} L0,${iH+5}Z`).attr('fill','var(--muted)').attr('opacity',0.35);
+
+  const bars = g.selectAll('.bar').data(data).join('rect')
+    .attr('x',d=>x(d.c)).attr('y',iH).attr('width',x.bandwidth()).attr('rx',1)
+    .attr('fill','var(--accent2)').attr('fill-opacity',0.8).attr('height',0);
+  bars.transition().duration(500).ease(d3.easeCubicOut).attr('y',d=>y(d.v)).attr('height',d=>iH-y(d.v));
+  g.selectAll('.vl').data(data).join('text')
+    .attr('x',d=>x(d.c)+x.bandwidth()/2).attr('y',d=>y(d.v)-6).attr('text-anchor','middle')
+    .attr('font-size','0.62rem').attr('font-family','Space Mono, monospace').attr('fill','var(--text)').text(d=>d.v.toFixed(1));
+
+  bars.on('mousemove',(e,d)=>showTip(e,d.c,d.v.toFixed(2)+' t','Axis hides true scale — global avg ~6 t'))
+      .on('mouseleave',hideTip);
+}
+
+function bRenderCherry() {
+  document.getElementById('b-annotation').innerHTML =
+    '<strong>Cherry-Picked Countries</strong>Only 6 countries with the least improvement are shown. The 33+ countries that reduced emissions are omitted entirely.';
+  document.getElementById('b-legend').innerHTML =
+    '<div class="legend-item" style="color:var(--accent2)">⚠ 33+ countries that improved are hidden from this chart</div>';
+
+  const cherry = ['Kazakhstan','Serbia','Belarus','Israel','Ireland','Iceland'].filter(c=>DATA[c]);
+  const data = cherry.map(c=>{
+    const v0=DATA[c][0],v1=lastVal(c);
+    if(!v0||!v1) return null;
+    return {c,delta:+(v1-v0).toFixed(2)};
+  }).filter(Boolean).sort((a,b)=>b.delta-a.delta);
+
+  const container = document.getElementById('b-chart-scroll');
+  const W = container.clientWidth;
+  const margin = { top: 36, right: 80, bottom: 28, left: 110 };
+  const H = data.length * 38 + margin.top + margin.bottom;
+  const iW = W - margin.left - margin.right, iH = H - margin.top - margin.bottom;
+  const ext = d3.max(data,d=>Math.abs(d.delta))*1.2;
+
+  const svg = d3.select('#b-svg').attr('width',W).attr('height',H);
+  svg.selectAll('*').remove();
+
+  svg.append('text').attr('x',W/2).attr('y',22).attr('text-anchor','middle')
+    .attr('font-family','Syne, sans-serif').attr('font-weight',800).attr('font-size','0.8rem')
+    .attr('fill','var(--accent2)').attr('letter-spacing','0.04em')
+    .text('CLIMATE COMMITMENTS: LITTLE TO NO PROGRESS');
+
+  const x = d3.scaleLinear().domain([-ext,ext]).range([0,iW]);
+  const y = d3.scaleBand().domain(data.map(d=>d.c)).range([0,iH]).padding(0.3);
+  const g = svg.append('g').attr('transform',`translate(${margin.left},${margin.top})`);
+  const x0 = x(0);
+
+  g.append('line').attr('x1',x0).attr('x2',x0).attr('y1',0).attr('y2',iH).attr('stroke','var(--muted)').attr('stroke-width',1);
+  g.append('g').attr('transform',`translate(0,${iH})`).call(d3.axisBottom(x).ticks(5).tickFormat(d=>(d>0?'+':'')+d+' t')).call(styleAxis);
+  g.append('g').call(d3.axisLeft(y).tickSize(0)).call(ax=>{ax.select('.domain').remove();ax.selectAll('text').attr('fill','var(--text)').attr('font-size','0.62rem').attr('font-family','Space Mono, monospace').attr('dx',-6);});
+
+  const bars = g.selectAll('.bar').data(data).join('rect')
+    .attr('x',d=>d.delta<0?x(d.delta):x0).attr('y',d=>y(d.c))
+    .attr('height',y.bandwidth()).attr('rx',1)
+    .attr('fill',d=>d.delta>=0?'var(--accent2)':'var(--muted)').attr('fill-opacity',0.8).attr('width',0);
+  bars.transition().duration(500).ease(d3.easeCubicOut).attr('width',d=>Math.abs(x(d.delta)-x0));
+  g.selectAll('.vl').data(data).join('text')
+    .attr('x',d=>d.delta<0?x(d.delta)-4:x0+Math.abs(x(d.delta)-x0)+4)
+    .attr('text-anchor',d=>d.delta<0?'end':'start')
+    .attr('y',d=>y(d.c)+y.bandwidth()/2+4)
+    .attr('font-size','0.58rem').attr('font-family','Space Mono, monospace').attr('fill','var(--muted)')
+    .text(d=>(d.delta>0?'+':'')+d.delta.toFixed(1)+' t');
+
+  bars.on('mousemove',(e,d)=>showTip(e,d.c,(d.delta>0?'+':'')+d.delta.toFixed(2)+' t','Most countries that improved are excluded'))
+      .on('mouseleave',hideTip);
+}
+
+function bRenderNoDrop() {
+  document.getElementById('b-annotation').innerHTML =
+    '<strong>Decontextualised Time Window</strong>Only 2019–present is shown, highlighting the post-COVID rebound. The full decade of decline before 2019 is hidden.';
+  document.getElementById('b-legend').innerHTML =
+    '<div class="legend-item" style="color:var(--accent2)">⚠ Decade of prior decline hidden — window starts at COVID-era low</div>';
+
+  const highlight = [
+    {c:'Germany',col:'#00e5ff'},{c:'France',col:'#a8ff78'},
+    {c:'Japan',col:'#85b7eb'},{c:'Poland',col:'#ff6b35'},
+    {c:'Australia',col:'#ffaa80'},
+  ].filter(h=>DATA[h.c]);
+
+  const zoomStart = Math.max(0, YEARS.indexOf(2019));
+  const zoomYears = YEARS.slice(zoomStart);
+
+  const container = document.getElementById('b-chart-scroll');
+  const W = container.clientWidth, H = 320;
+  const margin = { top: 36, right: 90, bottom: 34, left: 46 };
+  const iW = W - margin.left - margin.right, iH = H - margin.top - margin.bottom;
+
+  const svg = d3.select('#b-svg').attr('width',W).attr('height',H);
+  svg.selectAll('*').remove();
+
+  svg.append('text').attr('x',W/2).attr('y',22).attr('text-anchor','middle')
+    .attr('font-family','Syne, sans-serif').attr('font-weight',800).attr('font-size','0.8rem')
+    .attr('fill','var(--accent2)').attr('letter-spacing','0.04em')
+    .text('GHG EMISSIONS RISING AGAIN — ACTION HAS STALLED');
+
+  const allVals = highlight.flatMap(h=>zoomYears.map((_,i)=>DATA[h.c][zoomStart+i]).filter(v=>v!=null));
+  const yMin = d3.min(allVals)*0.97, yMax = d3.max(allVals)*1.02;
+  const x = d3.scalePoint().domain(zoomYears).range([0,iW]);
+  const y = d3.scaleLinear().domain([yMin,yMax]).range([iH,0]);
+  const g = svg.append('g').attr('transform',`translate(${margin.left},${margin.top})`);
+
+  g.selectAll('.yg').data(y.ticks(5)).join('line')
+    .attr('x1',0).attr('x2',iW).attr('y1',d=>y(d)).attr('y2',d=>y(d))
+    .attr('stroke','var(--border)').attr('stroke-dasharray','2,3');
+  g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(d=>d.toFixed(1)+' t')).call(styleAxis);
+  g.append('g').attr('transform',`translate(0,${iH})`).call(d3.axisBottom(x).tickFormat(d=>d)).call(ax=>{styleAxis(ax);ax.select('.domain').attr('stroke','var(--border)');});
+
+  const line = d3.line().x((_,i)=>x(zoomYears[i])).y(d=>d!=null?y(d):null).defined(d=>d!=null).curve(d3.curveMonotoneX);
+  highlight.forEach(({c,col})=>{
+    const sliced = zoomYears.map((_,i)=>DATA[c][zoomStart+i]);
+    const path = g.append('path').datum(sliced).attr('fill','none').attr('stroke',col).attr('stroke-width',1.5).attr('d',line);
+    const len = path.node().getTotalLength();
+    path.attr('stroke-dasharray',len).attr('stroke-dashoffset',len).transition().duration(800).ease(d3.easeLinear).attr('stroke-dashoffset',0);
+    const last = sliced.filter(v=>v!=null).slice(-1)[0];
+    const li = sliced.lastIndexOf(last);
+    if(last!=null) g.append('text').attr('x',x(zoomYears[li])+5).attr('y',y(last)+4).attr('font-size','0.56rem').attr('font-family','Space Mono, monospace').attr('fill',col).text(c.length>10?c.slice(0,9)+'…':c);
+  });
+
+  const vline = g.append('line').attr('y1',0).attr('y2',iH).attr('stroke','var(--muted)').attr('stroke-width',1).attr('opacity',0);
+  g.append('rect').attr('width',iW).attr('height',iH).attr('fill','transparent')
+    .on('mousemove',function(event){
+      const [mx]=d3.pointer(event);
+      const i=d3.minIndex(zoomYears.map(yr=>Math.abs(x(yr)-mx)));
+      vline.attr('x1',x(zoomYears[i])).attr('x2',x(zoomYears[i])).attr('opacity',1);
+      const vals=highlight.map(h=>DATA[h.c][zoomStart+i]!=null?`${h.c}: ${DATA[h.c][zoomStart+i].toFixed(1)}t`:'').filter(Boolean).join(' · ');
+      showTip(event,String(zoomYears[i]),vals,'All showed decade-long decline before 2019');
+    }).on('mouseleave',()=>{hideTip();vline.attr('opacity',0);});
+}
+</script>
 </body>
 </html>
