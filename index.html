@@ -542,29 +542,115 @@
     <!-- WRITE-UP SECTION -->
     <div class="section" id="section-writeup">
       <div class="writeup-scroll">
-        <h2>YOUR <span>WRITE-UP</span> TITLE HERE</h2>
+        <h2>ASSIGNMENT 2 <span>WRITE-UP</span></h2>
 
-        <p>YOUR INTRODUCTORY PARAGRAPH HERE. Replace this with your own text setting the scene
-        and explaining what the dataset shows and why it matters to your audience.</p>
+        <p>This visualization shows Greenhouse Gas Emissions in various contexts and statistics of the 
+          over-time reduction or growth of emissions. The data is sourced from The Organization for 
+          Economic Co-operation and Development (OECD), an international forum for democratic and free 
+          market economies that convenes to generate and pursue policy for global economic growth and 
+          well-being. This data uses all of the member countries’ emissions data from 1988 to 2023, 
+          found through their National Inventory Submissions to the United Nations Framework Convention 
+          on Climate Change. This visualization seeks to investigate further into these changes and 
+          discover how countries have been progressing in their emissions reduction over time, especially 
+          in recent years.</p>
 
-        <h3>Key Finding One</h3>
-        <p>YOUR FINDING HERE. Describe what the white hat chart reveals — which countries have
-        the highest per-capita emissions, and how the overall picture has shifted since the
-        earliest year in the dataset.</p>
+        <h3>White Hat Visualization</h3>
+        <p>The first section of the visualization is the White Hat section. The three visualizations 
+          in this section aim to report the data as accurately and cleanly as possible. 
+          When creating these visualizations, our team focused on three key aspects to accomplish 
+          truthful data reporting: context, encodings, and annotations. By focusing on making these 
+          three aspects as interpretable as possible, all three of our visualizations became much more 
+          powerful and explanatory. </p>
 
-        <div class="writeup-callout">
-          YOUR PULL QUOTE OR KEY STATISTIC HERE — e.g. "Australia emits nearly 4× more
-          CO₂-equivalent per person than France, despite both being OECD members."
-        </div>
+        <p>The first visualization is a bar graph showing the per capita greenhouse gas emissions in 2023, 
+          ranking the countries from highest to lowest per capita emissions. This visualization uses full 
+          context by providing all 44 member countries of the OECD in the visualization alongside groupings 
+          of emissions (high, mid, and low) thresholds and emphasizing this through the color encodings. 
+          The colors are specifically meant to evoke good and bad, with red being tied to higher emissions 
+          per capita, while green is given to the countries with lower emissions per capita. Blue is given 
+          to countries in the middle, or with about neutral emissions, compared to their peers. The exact 
+          value is shown via tooltips and side annotations on the bar, with each value displayed alongside 
+          the legend at the top to explain the color encoding, providing sufficient context for the entire 
+          visualization. This visualization helps to take a full look at the extremes while still being able 
+          to contextualize that extreme against peers, which establishes a contextual basis of how extreme 
+          those countries' emissions per capita really are and a reasonable threshold for what they should be 
+          working towards with policy. </p>
 
-        <h3>Key Finding Two</h3>
-        <p>YOUR FINDING HERE. Discuss the trend data — most countries show a downward
-        trajectory, with a notable dip in 2020 followed by a partial rebound in 2021–22
-        as economic activity recovered post-COVID.</p>
+        <p>The second visualization takes similar data but instead shows trend lines, providing a 
+          time-series perspective on emissions reduction between 2014 and 2023. The trend lines show a 
+          very large contextual scope around various events and time within that span, such as the COVID-19 
+          quarantine, that would see an emissions reduction. The larger contextual timespan helps show the 
+          story of declining emissions for all 8 countries since 2014. Although there is a larger dip ~2020 
+          for many countries, they were already on a decreasing trend beforehand, showing COVID-19 quarantine 
+          had little influence on emissions reduction per capita. Contrasting colors were chosen to help keep 
+          each line distinct from the other, making it easy to track each nation using the legend given at the 
+          top of the visualization. In addition, there are tooltips available for each year to show the exact 
+          emissions per capita for each given country. </p>
 
-        <h3>How the Same Data Can Mislead</h3>
-        <p>The Black Hat tab demonstrates three common manipulation techniques applied to
-        the identical underlying dataset. Compare the design choices:</p>
+        <p>The final White Hat visualization is a diverging bar chart meant to show the trend line data 
+          more concisely, showing the overall growth or reduction of emissions per capita from 2014 to 2023, 
+          as shown in the left-hand title. This keeps the encodings from the previous bar chart consistent, 
+          using green to show reduction and red to show growth, which is positive and negative for society, 
+          respectively. Further annotation is given through both the value at the end of the bar as well as 
+          the tooltips, showing both the exact ton reduction value as well as the percent change in emissions 
+          per capita from the 2014 value to the 2023 value. This helps provide more context on what countries 
+          and regions should seek to change policy to promote emissions reduction, rather than focusing on raw 
+          output values, which don’t tell the full story. </p>
+
+        <h3>Black Hat Visualization</h3>
+        <p>YThe second section of the visualization is the Black Hat section. This section seeks to use 
+          the same dataset, but generates wrong insights due to various mistakes made while generating 
+          the visualizations of the data. When thinking about how to misrepresent the data, our team came 
+          up with three main ideas on how to do so: incorrect axes, cherry-picked data, and minimizing 
+          time-series scope. Using these three methods, our team developed three visualizations that 
+          misrepresent the data as strongly as possible, leading to incomplete insights drawn from them. 
+          These visualizations are meant to mirror the White Hat section to show how the same data could 
+          easily be transformed when not handled correctly or even maliciously.</p>
+
+        <p>The first visualization uses truncated axes on a bar graph to overemphasize the difference in 
+          emissions per capita between countries, causing the differences between the top emitters per 
+          capita to be much larger than they really are. Viewers can easily conclude from this visualization 
+          that Australia, Canada, and Kazakhstan are the world's top emitters and seem almost unbounded 
+          in how much greenhouse gas they are emitting. This graph also fails to provide a full context 
+          for the selected countries, not specifying that this only accounts for OECD member countries. 
+          By eliminating this context as well, the other 100+ countries not included in the OECD are also 
+          put into perspective as lower emitters than the countries given on this bar graph. Both of these 
+          malicious changes to the visualization inflate the emissions of Australia to a very large degree, 
+          which could misdirect policy changes to target Australia despite its decrease in emissions, as seen 
+          in the White Hat visualizations. </p>
+        
+        <p>The second visualization focuses on cherry-picking only specific countries on the diverging bar chart 
+          to limit the entire scope of climate reductions. By showing only countries with minimal reductions and 
+          one country with gains, it eliminates the true story of widespread emissions reduction. The title 
+          perfectly emphasizes this point and is written to inflame the viewer’s feelings about climate change 
+          and emissions reduction. In addition, this visualization specifically chooses to use the country with 
+          the largest amount of growth to best contrast the minimal growth from the other countries. This reinforces 
+          the concept of stagnation by countries in their emissions reduction efforts. Finally, the graph also 
+          chooses to omit more information about the scope and time frame from which this data is pulled. The 
+          tooltips also don’t give any further information on this point, instead opting to only include the 
+          value of change, as well as the phrase “Most countries that improved are removed.” While this phrase 
+          helps keep the visualization more honest, it doesn’t provide any further context on this group, while 
+          hiding in the tooltips rather than being a disclaimer on the larger visualization. </p>
+
+        <p>The final Black Hat visualization is a sliced version of the trend lines from the White Hat 
+          section, this time only including the years of 2019 to 2023. In this span, the trend lines 
+          instead stagnate much more, even showing growth for some countries. This visualization cherry 
+          picks specific countries from the data that show high amounts of emissions in addition to 
+          stagnation or growth in some periods. This removes the larger story of a strong overall 
+          reduction prior to 2019 that continues on into the 2020s, and instead replaces it with 
+          stagnation and failure to improve in the 2020s, with only 2019 as a previous baseline to 
+          reference. In addition, this reinforces the previous narrative that Australia is above and 
+          beyond the biggest contributor to greenhouse gas emissions by over 10 tons compared to other 
+          countries. This comparison can be made due to the cherry-picking of countries, such as Canada 
+          and New Zealand, two comparable emitters, which are left out of the trend lines. The tooltips 
+          follow a similar format to the previous visualization, containing more context about things that 
+          were omitted, without elaborating on the additional context that makes the White Hate visualizations 
+          successful. </p>
+
+        <h3>Comparison</h3>
+        <p>Listed below are the specific design choices that distinguish the White Hat and Black Hat
+            visualizations, focusing on contrasting elements that improve or diminish readability.
+        </p>
 
         <div class="writeup-compare">
           <div class="compare-card card-white">
@@ -583,18 +669,47 @@
               <li>Truncated axis exaggerates</li>
               <li>Only worst performers shown</li>
               <li>Recent uptick decontextualised</li>
-              <li>Alarmist / accusatory framing</li>
+              <li>Accusatory framing</li>
               <li>No baseline for comparison</li>
             </ul>
           </div>
         </div>
 
-        <h3>Methodology Note</h3>
-        <p>YOUR METHODOLOGY NOTE HERE. Explain what "excluding LULUCF" means, the unit
-        (kg CO₂-equivalent per person, values in thousands in the raw CSV), data source,
-        and any known gaps such as missing values for some countries in the most recent year.</p>
+        <h3>Extra Credit Features</h3>
+        <p>On this project, our team worked towards multiple Extra Credit Features. The first is the 
+          development of 3 White Hat and 3 Black Hat visualizations for a total of 6 visualizations. Our 
+          team was able to create three larger visualizations to best explain and visualize the data as 
+          truthfully as possible, following our principle guidelines to make 3 effective visuals in the 
+          White Hat section of the project. We also honed in on specific techniques in the Black Hat 
+          section to develop cohesive storytelling elements that aren’t true based on the entire data, 
+          but could easily be concluded by each of the three visualizations in that section.</p> 
 
-        <p>YOUR CLOSING PARAGRAPH HERE.</p>
+        <p>Secondly, on our White Hat 2023 ranking visualization, we include multiple sorting and 
+          filtering options to change and dynamically adapt the visualization. The user can sort by 
+          lowest or highest values first, in addition to changing the range of countries that are 
+          included, ranging from all 90 in the dataset to only the top 10. This feature strongly enhances 
+          the usability and insights obtainable by allowing the user to filter and access the exact range 
+          that they want to look at when evaluating policy and regions to target policy.</p>
+
+        <p>Thirdly, all 6 of our visualizations contain smoothed animation in addition to tooltips to 
+          provide additional context for the user to read and take in. These made all of our 
+          visualizations much more interactive and easy to view, making the overall user experience 
+          much stronger. Our team wanted to incorporate as much of a good viewing experience as possible 
+          with our White Hat visualizations alongside easy-to-obtain insights for the OECD to generate 
+          policy towards. </p>
+
+        <h3>Development Process</h3>
+        <p>Our team chose to divide and conquer for this project, with each member of our team handling a 
+          different aspect of the project. Valentina worked on the White Hat visualizations, which took 
+          about 3 hours to conceive topics for and then create. The hardest part about this section was the 
+          smoothing animation and tooltips. The animation was difficult to learn and implement, while the 
+          tooltips spurred much debate about how to include on different parts of the different charts we 
+          developed.  On the other hand, Keenan developed the Black Hat visualizations, which took about 2.5 
+          total hours to complete. The most difficult aspect of this side was the initial brainstorming of 
+          what techniques to use, and we spent a lot of time as a team talking this over. Finally, Jack 
+          handled the write-up and demo video, which took a collective 3 hours of effort to write and record. 
+          The hardest part of this section was coming up with some of the storylines of the visualizations to 
+          include, which we covered a lot during our ideation phase for this project. </p>
       </div>
     </div>
 
